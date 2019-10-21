@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.backend-shared.json",
+    "compilerOptions": {
+        "sourceMap": false,
+        "outDir": "build/backend",
+        "inlineSourceMap": true
+    },
+    "include": [
+        "src/backend/**/*",
+    ]
+}
