@@ -1,5 +1,8 @@
+import 'bootstrap/dist/css/bootstrap.css';
+import 'font-awesome/css/font-awesome.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import '../node_modules/bootstrap/dist/js/bootstrap.min.js';
 import App from './components/App';
 import './scss/dnd-cheat-sheet.scss';
 import * as serviceWorker from './serviceWorker';
