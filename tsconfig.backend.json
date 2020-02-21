@@ -2,10 +2,11 @@
     "extends": "./tsconfig.backend-shared.json",
     "compilerOptions": {
         "sourceMap": false,
-        "outDir": "build/backend",
+        "outDir": "build",
         "inlineSourceMap": true
     },
     "include": [
         "src/backend/**/*",
+        "src/scripts/**/*"
     ]
 }

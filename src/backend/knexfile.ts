@@ -7,13 +7,16 @@ pg.types.setTypeParser(1700, 'text', Number); // numeric
 pg.types.setTypeParser(1082, 'text', String); // date
 
 let databaseName = 'dndcheatsheet';
+let databaseTestName = 'dndcheatsheet_test';
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     let branchTag = gitBranch.sync().replace(/\W+/g, '_').toLowerCase();
     branchTag = branchTag.substring(0, 7).replace(/_$/, '');
     databaseName += '_' + branchTag;
+    databaseTestName += '_' + branchTag;
 }
 
-export const pgConfig = {
+
+export = {
     development: {
         client: 'postgresql',
         connection: {
@@ -35,6 +38,26 @@ export const pgConfig = {
             directory: path.join(__dirname, 'seeds'),
         },
         asyncStackTraces: true,
+    },
+    test: {
+        client: 'postgresql',
+        connection: {
+            host: '127.0.0.1',
+            database: databaseTestName,
+            user: 'dnd',
+            password: 'dev',
+        },
+        pool: {
+            min: 2,
+            max: 20,
+        },
+        migrations: {
+            tableName: 'knex_migrations',
+            directory: path.join(__dirname, 'migrations'),
+        },
+        seeds: {
+            directory: path.join(__dirname, 'seeds'),
+        },
     },
     production: {
         client: 'postgresql',
