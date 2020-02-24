@@ -12,19 +12,11 @@ async function run() {
 
     await client.connect();
     try {
-
-        try {
-            await client.query(`CREATE DATABASE ${knexfile.test.connection.database} OWNER dnd;`);
-            console.log('created database ' + knexfile.test.connection.database);
-            // tslint:disable-next-line:no-empty
-        } catch { }
-
         await client.query(`CREATE DATABASE ${knexfile.development.connection.database} OWNER dnd;`);
         console.log('created database ' + knexfile.development.connection.database);
         await client.end();
 
-        const config = (knexfile as any)['development'];
-
+        const config = knexfile['development'];
         const database = Knex(config);
 
         await database.migrate.latest();
