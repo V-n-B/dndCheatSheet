@@ -9,35 +9,46 @@
     "dev:backend:watch": "npm run clean && mkdirp build/backend && mkdirp build/frontend && npm run build-frontend && parallel build-ts-backend:watch serve:backend:watch",
     "build-frontend": "cd src/frontend && npm install && wait-on node_modules/ && npm run build && wait-on build/ && cp -R build/ ../../build/frontend",
     "build-ts-backend:watch": "npm run build-ts-backend -- -w --preserveWatchOutput",
-    "build-ts-backend": "tsc -p tsconfig.backend.json",
-    "serve:backend:watch": "nodemon -C -d 1 --ext js --watch build/backend --exec \"node --inspect -r dotenv/config build/backend/server.js\""
+    "build-ts-backend": "tsc -incremental -p tsconfig.backend.json",
+    "serve:backend:watch": "nodemon -C -d 1 --ext js --watch build/backend --exec \"wait-on build/scripts/createDatabase.js && node build/scripts/createDatabase.js && node --inspect -r dotenv/config build/backend/server.js\"",
+    "create-database": "npm run clean && npm run build-ts-backend && node -r dotenv/config build/scripts/createDatabase.js",
+    "remove-databases": "ts-node --transpile-only src/scripts/removeDatabases.ts"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/voinik/dndCheatSheet.git"
   },
-  "author": "Victor Panteleev",
+  "author": "Victor Panteleev & Ben Linnenbank",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/voinik/dndCheatSheet/issues"
   },
   "homepage": "https://github.com/voinik/dndCheatSheet#readme",
   "dependencies": {
+    "@wwwouter/typed-knex": "2.4.1",
     "aws-sdk": "2.555.0",
     "body-parser": "1.19.0",
     "express": "4.17.1",
-    "helmet": "3.21.2"
+    "git-branch": "2.0.1",
+    "helmet": "3.21.2",
+    "knex": "0.20.2",
+    "lodash": "4.17.15",
+    "pg": "7.12.1"
   },
   "devDependencies": {
     "@types/body-parser": "1.17.1",
     "@types/express": "4.17.1",
+    "@types/git-branch": "2.0.1",
     "@types/helmet": "0.0.44",
+    "@types/lodash": "4.14.149",
+    "@types/pg": "7.11.2",
     "@wwwouter/tslint-contrib": "1.0.0",
     "dotenv": "8.2.0",
     "mkdirp": "0.5.1",
     "nodemon": "1.19.4",
     "npm-parallel": "2.0.1",
     "rimraf": "3.0.0",
+    "ts-node": "8.6.2",
     "tslint": "5.20.0",
     "tslint-microsoft-contrib": "6.2.0",
     "typescript": "3.6.4",

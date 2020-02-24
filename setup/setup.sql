@@ -1,0 +1,3 @@
+CREATE USER dnd
+  WITH PASSWORD 'dev'
+  CREATEDB;
