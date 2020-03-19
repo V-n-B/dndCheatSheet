@@ -1,0 +1,76 @@
+// Styling for the navbar
+#mainNav {
+    background-color: white;
+    text-transform: uppercase;
+    .navbar-toggler {
+      font-size: 16px;
+      right: 0;
+      padding: 13px;
+      color: white;
+      border: 0;
+      background-color: black;
+      @include heading-font;
+    }
+    .navbar-brand {
+      margin-left: 15px;
+      color: black;
+      font-weight: bolder !important;
+      font-size: 23px !important;
+      letter-spacing: -0.05cm;
+      @include heading-font;
+    }
+    .navbar-nav {
+      .nav-item {
+        .nav-link {
+          font-weight: 400;
+          padding: 0.75em 0;
+          letter-spacing: 1px;
+          color: black;
+          @include heading-font;
+          &.active,
+          &:hover {
+            // color: #a48e8e;
+            color: #931a1a;
+          }
+        }
+      }
+    }
+  }
+  @media(min-width:767px) {
+    #mainNav {
+      text-transform: uppercase;
+      // padding-left: 100px;
+      // padding-right: 100px;
+      padding-top: 25px;
+      padding-bottom: 25px;
+      -webkit-transition: padding-top 0.3s, padding-bottom 0.3s;
+      -moz-transition: padding-top 0.3s, padding-bottom 0.3s;
+      transition: padding-top 0.3s, padding-bottom 0.3s;
+      border: none;
+      background-color: white;
+      .navbar-brand {
+        font-weight: bolder;
+        letter-spacing: -0.05cm;
+        font-size: 35px !important;
+        -webkit-transition: all 0.3s;
+        -moz-transition: all 0.3s;
+        transition: all 0.3s;
+      }
+      .navbar-nav {
+        .nav-item {
+          .nav-link {
+            padding: 1.1em 1em !important;
+          }
+        }
+      }
+      &.navbar-shrink {
+        padding-top: 0;
+        padding-bottom: 0;
+        background-color: white;
+        .navbar-brand {
+          font-size: 1.25em;
+        }
+      }
+    }
+  }
+  
