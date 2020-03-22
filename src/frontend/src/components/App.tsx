@@ -9,8 +9,10 @@ library.add(faBars);
 export function App(props: { children: React.ReactNode }) {
     return (
         <>
-            <Navigation/>
-            {props.children}
+            <Navigation />
+            <div className="content-wrapper">
+                {props.children}
+            </div>
         </>
     );
 }
