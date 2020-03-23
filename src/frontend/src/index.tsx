@@ -11,6 +11,7 @@ import { App } from './components/App';
 import { Login } from './components/login/Login';
 import { Register } from './components/register/Register';
 import './scss/dnd-cheat-sheet.scss';
+import { Dashboard } from './components/home/Dashboard';
 
 polyfill();
 
@@ -22,7 +23,7 @@ if (document.getElementById('app')) {
             <App>
                 <Switch>
                     <Route path="/" exact>
-                        {/* <Dashboard /> */}
+                        <Dashboard />
                     </Route>
                     <Route path="/login" exact>
                         <Login />
