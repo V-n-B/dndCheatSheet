@@ -18,8 +18,11 @@ export function Register() {
                     <Label for="username">Username</Label>
                     <Input type="text" name="username" id="username" placeholder="Enter your username" />
                 </FormGroup>
-                <Button>Submit</Button>
+                <Button onClick={() => null}>Submit</Button>
             </Form>
         </>
     );
+
+    // function handle
+
 }
