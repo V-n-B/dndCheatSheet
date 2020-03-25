@@ -20,8 +20,9 @@
 version: 2.1
 jobs:
   build:
+    # pre-built images: https://circleci.com/docs/2.0/circleci-images/
     docker:
-      - image: alpine:3.7
+      - image: circleci/node:12.16.1
     steps:
       - checkout
       - run:
@@ -34,3 +35,7 @@ jobs:
           command: |
             ls -al
             echo '^^^That should look familiar^^^'
+      - run:
+          name: Running in a Unique Container
+          command: |
+            node -v
