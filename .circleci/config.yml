@@ -30,23 +30,23 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys:
-          - backend-packages-v1-{{ checksum "package-lock.json" }}-{{ .Branch }}
-          - backend-packages-v1-{{ checksum "package-lock.json"}}-
-          - backend-packages-v1-
+          keys:
+            - backend-packages-v1-{{ checksum "package-lock.json" }}-{{ .Branch }}
+            - backend-packages-v1-{{ checksum "package-lock.json"}}-
+            - backend-packages-v1-
 
-        - run: ls -a
-        - run: echo If there is a node_modules directory, we are good!
-        - run: npm install --prefer-offline --no-save
-        - run: npm run build-ts-backend
+      - run: ls -a
+      - run: echo If there is a node_modules directory, we are good!
+      - run: npm install --prefer-offline --no-save
+      - run: npm run build-ts-backend
 
-        - save_cache:
+      - save_cache:
           name: Save backend node_modules cache
           key: backend-packages-v1-{{ checksum "package-lock.json" }}-{{ .Branch }}
           paths:
             - node_modules
 
-        - persist_to_workspace:
+      - persist_to_workspace:
           root: ./
           paths:
             - build/**
@@ -57,25 +57,25 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys:
-          - frontend-packages-v1-{{ checksum "src/frontend/package-lock.json" }}-{{ .Branch }}
-          - frontend-packages-v1-{{ checksum "src/frontend/package-lock.json"}}-
-          - frontend-packages-v1-
+          keys:
+            - frontend-packages-v1-{{ checksum "src/frontend/package-lock.json" }}-{{ .Branch }}
+            - frontend-packages-v1-{{ checksum "src/frontend/package-lock.json"}}-
+            - frontend-packages-v1-
 
-        - run: cd src/frontend
-        - run: ls -a
-        - run: echo If there is a node_modules directory, we are good!
-        - run: npm install --prefer-offline --no-save
-        - run: npm run build
-        - run: cd ../..
+      - run: cd src/frontend
+      - run: ls -a
+      - run: echo If there is a node_modules directory, we are good!
+      - run: npm install --prefer-offline --no-save
+      - run: npm run build
+      - run: cd ../..
 
-        - save_cache:
+      - save_cache:
           name: Save frontend node_modules cache
           key: frontend-packages-v1-{{ checksum "src/frontend/package-lock.json" }}-{{ .Branch }}
           paths:
             - src/frontend/node_modules
 
-        - persist_to_workspace:
+      - persist_to_workspace:
           root: ./
           paths:
             - src/frontend/build/**
@@ -86,7 +86,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-        at: ./
+          at: ./
       - run: echo Check if the workspace has been properly added... Are the build and node_modules folders there?
       - run: ls -a
       - run: echo Same thing for the frontend?
@@ -102,6 +102,6 @@ workflows:
     - build-backend
     - build-frontend
     - linter:
-      requires:
-        - build-backend
-        - build-frontend
+        requires:
+          - build-backend
+          - build-frontend
