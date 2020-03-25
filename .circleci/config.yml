@@ -62,7 +62,8 @@ jobs:
             - frontend-packages-v1-{{ checksum "src/frontend/package-lock.json"}}-
             - frontend-packages-v1-
 
-      - run: cd src/frontend && ls -a && echo If there is a node_modules directory, we are good! && npm install --prefer-offline --no-save
+      - run: cd src/frontend && ls -a && echo If there is a node_modules directory, we are good!
+      - run: cd src/frontend && npm install --prefer-offline --no-save
       - run: cd src/frontend && npm run build
 
       - save_cache:
