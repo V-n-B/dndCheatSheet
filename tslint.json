@@ -33,10 +33,7 @@
         "max-line-length": false,
         "member-access": true,
         "member-ordering": [
-            true,
-            "public-before-private",
-            "static-before-instance",
-            "variables-before-functions"
+            true, { "order": "fields-first" }
         ],
         "no-any": false,
         "no-arg": true,
@@ -153,7 +150,7 @@
         "no-duplicate-parameter-names": true,
         "no-empty-interface": true,
         "no-exec-script": true,
-        "no-function-constructor-with-string-args": true,
+        "function-constructor": true,
         "no-function-expression": true,
         "no-http-string": [
             true,
@@ -167,7 +164,7 @@
         "no-missing-visibility-modifiers": false,
         "no-multiline-string": true,
         "no-multiple-var-decl": true,
-        "no-unnecessary-bind": true,
+        "unnecessary-bind": true,
         "no-unnecessary-semicolons": true,
         "no-octal-literal": true,
         "no-regex-spaces": true,

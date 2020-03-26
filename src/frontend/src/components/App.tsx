@@ -1,8 +1,7 @@
-import React from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
-// import { Container } from 'reactstrap';
-import { Navigation } from './navbar/Navigation';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import React from 'react';
+import { Navigation } from './navbar/Navigation';
 
 library.add(faBars);
 
