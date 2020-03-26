@@ -70,8 +70,7 @@ jobs:
       - run: echo Same thing for the frontend?
       - run: ls -a src/frontend
       - run: npm run tslint
-      - run: cd src/frontend
-      - run: npm run tslint
+      - run: cd src/frontend && npm run tslint
 
 workflows:
   version: 2
