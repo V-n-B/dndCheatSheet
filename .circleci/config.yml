@@ -16,8 +16,6 @@ jobs:
             - backend-packages-v1-{{ checksum "package-lock.json"}}-
             - backend-packages-v1-
 
-      - run: ls -a
-      - run: echo If there is a node_modules directory, we are good!
       - run: npm install --prefer-offline --no-save
       - run: npm run build-ts-backend
 
@@ -43,7 +41,6 @@ jobs:
             - frontend-packages-v1-{{ checksum "src/frontend/package-lock.json"}}-
             - frontend-packages-v1-
 
-      - run: cd src/frontend && ls -a && echo If there is a node_modules directory, we are good!
       - run: cd src/frontend && npm install --prefer-offline --no-save
       - run: cd src/frontend && npm run build
 
@@ -65,10 +62,6 @@ jobs:
       - checkout
       - attach_workspace:
           at: ./
-      - run: echo Check if the workspace has been properly added... Are the build and node_modules folders there?
-      - run: ls -a
-      - run: echo Same thing for the frontend?
-      - run: ls -a src/frontend
       - run: npm run tslint
       - run: cd src/frontend && npm run tslint
 
