@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/voinik/dndCheatSheet#readme",
   "dependencies": {
+    "@ksyos/koi": "3.1.0",
     "@wwwouter/typed-knex": "2.4.1",
     "aws-sdk": "2.555.0",
     "body-parser": "1.19.0",
