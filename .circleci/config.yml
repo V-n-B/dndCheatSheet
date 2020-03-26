@@ -1,0 +1,77 @@
+version: 2.1
+
+executors:
+  docker-image:
+    docker:
+        - image: circleci/node:12.16.1
+
+jobs:
+  build-backend:
+    executor: docker-image
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - backend-packages-v1-{{ checksum "package-lock.json" }}-{{ .Branch }}
+            - backend-packages-v1-{{ checksum "package-lock.json"}}-
+            - backend-packages-v1-
+
+      - run: npm install --prefer-offline --no-save
+      - run: npm run build-ts-backend
+
+      - save_cache:
+          name: Save backend node_modules cache
+          key: backend-packages-v1-{{ checksum "package-lock.json" }}-{{ .Branch }}
+          paths:
+            - node_modules
+
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - build/**
+            - node_modules/**
+
+  build-frontend:
+    executor: docker-image
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - frontend-packages-v1-{{ checksum "src/frontend/package-lock.json" }}-{{ .Branch }}
+            - frontend-packages-v1-{{ checksum "src/frontend/package-lock.json"}}-
+            - frontend-packages-v1-
+
+      - run: cd src/frontend && npm install --prefer-offline --no-save
+      - run: cd src/frontend && npm run build
+
+      - save_cache:
+          name: Save frontend node_modules cache
+          key: frontend-packages-v1-{{ checksum "src/frontend/package-lock.json" }}-{{ .Branch }}
+          paths:
+            - src/frontend/node_modules
+
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - src/frontend/build/**
+            - src/frontend/node_modules/**
+
+  linter:
+    executor: docker-image
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./
+      - run: npm run tslint
+      - run: cd src/frontend && npm run tslint
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build-backend
+      - build-frontend
+      - linter:
+          requires:
+            - build-backend
+            - build-frontend

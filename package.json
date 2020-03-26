@@ -12,7 +12,8 @@
     "build-ts-backend": "tsc -incremental -p tsconfig.backend.json",
     "serve:backend:watch": "nodemon -C -d 1 --ext js --watch build/backend --exec \"wait-on build/scripts/createDatabase.js && node build/scripts/createDatabase.js && node --inspect -r dotenv/config build/backend/server.js\"",
     "create-database": "npm run clean && npm run build-ts-backend && node -r dotenv/config build/scripts/createDatabase.js",
-    "remove-databases": "ts-node --transpile-only src/scripts/removeDatabases.ts"
+    "remove-databases": "ts-node --transpile-only src/scripts/removeDatabases.ts",
+    "tslint": "tslint -t verbose --project tsconfig.backend.json"
   },
   "repository": {
     "type": "git",

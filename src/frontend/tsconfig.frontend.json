@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "sourceMap": true,
+        "target": "ES2017",
+        "jsx": "react",
+        "experimentalDecorators": true,
+        "noUnusedParameters": false,
+        "noUnusedLocals": true,
+        "emitDecoratorMetadata": false,
+        "outDir": "build/frontendbuild",
+        "skipLibCheck": true,
+        "strict": true,
+        "strictPropertyInitialization": false,
+        "esModuleInterop": true,
+        "moduleResolution": "node"
+    },
+    "include": [
+        "src/frontend/**/*",
+        "src/common/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}
