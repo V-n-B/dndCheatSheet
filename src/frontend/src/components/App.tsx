@@ -17,5 +17,3 @@ export function App(props: { children: React.ReactNode }) {
         </Container>
     );
 }
-
-// Derpa

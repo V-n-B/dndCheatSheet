@@ -5,10 +5,8 @@ This is a cheat sheet for DnD
 
 ### Setting up the database
 In order to use the application you need to have a local database installed. We use PostgreSQL as our database. 
-For Mac: Install PostgreSQL with the following command:
-```sh
-brew install postgresql
-```
+For Mac: Install PostgreSQL.app by following the three instructions *carefully* : https://postgresapp.com/
+
 Next, go to the root directory of the project and run this command to create a new role to handle the database commands through:
 ```sh
 psql -U postgres -f setup/setup.sql
