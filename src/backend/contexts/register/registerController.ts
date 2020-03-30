@@ -1,5 +1,5 @@
 import express from 'express';
-import { ErrorCodes } from '../../utils/ErrorCodes';
+import { BackendErrorCodes } from '../../utils/BackendErrorCodes';
 import { getCaptchaVerificationResponse } from '../../utils/getCaptchaVerificationResponse';
 
 const registerAction = 'register';
@@ -16,18 +16,23 @@ export async function register(req: express.Request, res: express.Response) {
     }
     if (!verification.success) {
         console.error('The token used did not come from our Google account');
-        return res.status(400).send({ code: ErrorCodes.CAPTCHA_FAILED });
+        return res.status(400).send({ code: BackendErrorCodes.CAPTCHA_FAILED });
     }
     if (verification.action !== registerAction) {
         console.error(`The action we got (${verification.action}) does not match the expected action (${registerAction})`);
-        return res.status(400).send({ code: ErrorCodes.CAPTCHA_FAILED });
+        return res.status(400).send({ code: BackendErrorCodes.CAPTCHA_FAILED });
     }
     if (verification.score < captchaScoreThreshold) {
         console.error(`The captcha score we got (${verification.score}) is lower than the threshold (${captchaScoreThreshold})`);
-        return res.status(400).send({ code: ErrorCodes.CAPTCHA_FAILED });
+        return res.status(400).send({ code: BackendErrorCodes.CAPTCHA_FAILED });
     }
 
     // TODO: Replace this for actual database calls
     console.log(`Registering new account with email: ${email}, username: ${username} and password: ${password}`);
-    res.status(200).send();
+
+    // TODO: Check if the username and email already exists. If they exist, send 200 with a message:
+    // res.statusMessage = BackendErrorCodes.EMAIL_ALREADY_EXISTS;
+    // return res.status(200).send({ code: BackendErrorCodes.EMAIL_ALREADY_EXISTS });
+
+    res.status(201).send({});
 }

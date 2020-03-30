@@ -1,0 +1,4 @@
+export enum FrontendErrorCodes {
+    CAPTCHA_FAILED = 'CAPTCHA_FAILED',
+    EMAIL_ALREADY_EXISTS = 'EMAIL_ALREADY_EXISTS',
+}

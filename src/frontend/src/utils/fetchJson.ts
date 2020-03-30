@@ -5,7 +5,13 @@ interface IFetchResult {
     message?: string;
 }
 
-export async function fetchJson(url: string, method: 'POST' | 'GET', body?: {}): Promise<IFetchResult> {
+export async function fetchJson(
+    url: string,
+    method: 'POST' | 'GET',
+    body?: {},
+    allowedErrorCodes?: string[],
+    allowedHTTPErrorCodes?: number[]
+): Promise<IFetchResult> {
     let bodyString = undefined;
     let status = 0;
     if (body) {
@@ -43,6 +49,19 @@ export async function fetchJson(url: string, method: 'POST' | 'GET', body?: {}):
     let code = 'DEFAULT';
     if (json && json.code) {
         code = json.code;
+    }
+    let message;
+    if (json && json.message) {
+        message = json.message;
+    }
+
+    if (status >= 400 && status < 500) {
+        if (allowedErrorCodes && allowedErrorCodes.includes(code)) {
+            return { status: status, errorCode: code, message: message };
+        }
+        if (allowedHTTPErrorCodes && allowedHTTPErrorCodes.includes(status)) {
+            return { status: status, errorCode: code };
+        }
     }
 
     throw new Error(`${status} ${code}`);

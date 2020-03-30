@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
+import { fetchJson } from '../../utils/fetchJson';
 import { FormSpinner } from '../../utils/FormSpinner';
+import { FrontendErrorCodes } from '../../utils/FrontendErrorCode';
+import { frontendErrorText } from '../../utils/frontendErrorText';
 import { ReCaptchaV3Wrapper } from '../../utils/ReCaptchaV3Wrapper';
 import { CenterText, Clearfix, DangerAlert, SendFormButton, SuccessAlert } from '../elements/common';
 
@@ -12,6 +15,7 @@ export function Register() {
     const [sentSuccess, setSentSuccess] = useState<boolean | null>(null);
     const [captchaReady, setCaptchaReady] = useState(false);
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const [feedbackText, setFeedbackText] = useState('');
 
 
     if (sentSuccess) {
@@ -104,23 +108,31 @@ export function Register() {
     }
 
     async function handleCaptchaToken(captchaToken: string) {
-        const result = await fetch('api/register', {
-            method: 'POST',
-            body: JSON.stringify({ email, password, username, captchaToken }),
-            headers: { 'Content-Type': 'application/json' },
-        });
+        const result = await fetchJson('api/register', 'POST', { email, password, username, captchaToken }, [FrontendErrorCodes.CAPTCHA_FAILED]);
 
-        if (result.status === 200) {
-            setIsProcessing(false);
-            setEmail('');
-            setPassword('');
-            setUsername('');
-            setSentSuccess(true);
+        setIsProcessing(false);
+
+        if (result.status === 201) {
+            handleRegisterSuccess();
         } else {
-            setIsProcessing(false);
             setSentSuccess(false);
             setFormSubmitted(false);
+            if (result.status === 200 && result.json && result.json.code) {
+                setFeedbackText(result.json.code);
+            } else if (result.errorCode) {
+                setFeedbackText(result.errorCode);
+            } else {
+                throw new Error('Unexpected status and missing errorCode');
+            }
         }
+    }
+
+    function handleRegisterSuccess() {
+        setEmail('');
+        setPassword('');
+        setUsername('');
+        setSentSuccess(true);
+        setFeedbackText('');
     }
 
     function renderFeedback() {
@@ -128,9 +140,22 @@ export function Register() {
             return <FormSpinner />;
         }
         if (sentSuccess === false) {
-            return <DangerAlert headerText="Whoops!">
-                Something went wrong! Please try again.
-            </DangerAlert>;
+            switch (feedbackText) {
+                case FrontendErrorCodes.EMAIL_ALREADY_EXISTS:
+                    return <DangerAlert headerText="Whoops!">
+                        {frontendErrorText[FrontendErrorCodes.EMAIL_ALREADY_EXISTS]}
+                    </DangerAlert>;
+
+                case FrontendErrorCodes.CAPTCHA_FAILED:
+                    return <DangerAlert headerText="What the..?!">
+                        {frontendErrorText[FrontendErrorCodes.CAPTCHA_FAILED]}
+                    </DangerAlert>;
+
+                default:
+                    return <DangerAlert headerText="Whoopsy!">
+                        Something went wrong! Please try again.
+                    </DangerAlert>;
+            }
         }
     }
 }
