@@ -8,7 +8,7 @@ interface IProps {
     onCaptchaToken: (captchaToken: string) => Promise<void>;
 }
 
-export function ReCaptchaV3(props: IProps) {
+export function ReCaptchaV3Wrapper(props: IProps) {
     const [isReady, setIsReady] = useState(false);
 
     const siteKey = (window as any).dndAppSettings.captchaSiteKey;

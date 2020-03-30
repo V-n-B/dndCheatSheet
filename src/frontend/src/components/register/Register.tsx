@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
 import { FormSpinner } from '../../utils/FormSpinner';
-import { ReCaptchaV3 } from '../../utils/ReCaptchaV3';
+import { ReCaptchaV3Wrapper } from '../../utils/ReCaptchaV3Wrapper';
 import { CenterText, Clearfix, DangerAlert, SendFormButton, SuccessAlert } from '../elements/common';
 
 export function Register() {
@@ -26,9 +26,9 @@ export function Register() {
         return (
             <>
                 {renderFeedback()}
-                <ReCaptchaV3 action="register" onCaptchaReady={isReady => setCaptchaReady(isReady)} formSubmitted={formSubmitted} onCaptchaToken={handleCaptchaToken}>
+                <ReCaptchaV3Wrapper action="register" onCaptchaReady={isReady => setCaptchaReady(isReady)} formSubmitted={formSubmitted} onCaptchaToken={handleCaptchaToken}>
                     {renderRegisterForm()}
-                </ReCaptchaV3>
+                </ReCaptchaV3Wrapper>
             </>
         );
     }
