@@ -34,23 +34,24 @@ cd ../..
 ### Setting up the environment
 Create a `.env` file in the root directory and ask Victor to give you the contents to put inside the file.
 
-### Start the app with our backend
-Starting the app with our backend will allow you to test the entire application (e.g. saving changes and using our database). Starting like this will also rebuild the backend after backend code changes, allowing you to instantly see the changes you make to the backend.
-If you make changes to the frontend, you'll have to stop the project and rerun it again to see the changes. If you're primarily developing in the frontend, see the next section.
-
-If you want to start the app with our own backend, make sure you're in the root directory, and then:
+### Sart the app with our frontend and backend together (you'll use this most often)
+You can start the app (both frontend and backend) in watch-mode with (make sure you're in the root directory):
 ```javascript
 npm start
+```
+
+All changes you make in both frontend and backend will be automatically rebuilt and served.
+
+### Start the app with our backend only
+If you don't need the frontend while working on the backend for some reason, you can just start the backend with (from the root directory): 
+
+```javascript
+npm run backend:dev:watch-no-frontend
 ```
 
 ### Start the frontend of the app only
-Starting the app with only the frontend will allow you to develop the frontend and see your changes instantly. You won't be able to use our backend, however. Use this when developing the frontend primarily.
+If you're working on the frontend and for some reason don't want the backend running, you can run it with (make sure you're in the root directory):
 
-If you want to start the app with the frontend only, make sure you're in the frontend directory (```cd src/frontend``` if you're in the root directory), and then:
 ```javascript
-npm start
+npm start frontend:dev:watch
 ```
-
-### TODO
-We need to check how much hassle it is to have to build a production build of the frontend each time we want to work on the frontend and backend at the same time. An option might be to eject the create-react-app so that we have control over webpack and so that we can watch both the frontend and backend together. It might, however, be possible to run both the backend and frontend in different tabs. This would require us to make sure the frontend knows where to find `/api/` calls (possibly an env variable). This way we wouldn't have to eject the frontend from create-react-app.
-
