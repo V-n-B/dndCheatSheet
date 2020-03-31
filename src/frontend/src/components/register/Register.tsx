@@ -5,7 +5,7 @@ import { FormSpinner } from '../../utils/FormSpinner';
 import { FrontendErrorCodes } from '../../utils/FrontendErrorCode';
 import { frontendErrorText } from '../../utils/frontendErrorText';
 import { ReCaptchaV3Wrapper } from '../../utils/ReCaptchaV3Wrapper';
-import { CenterText, Clearfix, DangerAlert, SendFormButton, SuccessAlert } from '../elements/common';
+import { CenterText, DangerAlert, SendFormButton, SuccessAlert } from '../elements/common';
 
 export function Register() {
     const [email, setEmail] = useState('');
@@ -90,7 +90,6 @@ export function Register() {
                             }}
                         />
                     </FormGroup>
-                    <Clearfix />
                     <CenterText>
                         <SendFormButton isProcessing={isProcessing} captchaReady={captchaReady} color="primary">
                             Send message

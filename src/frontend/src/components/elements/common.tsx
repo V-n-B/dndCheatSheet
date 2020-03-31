@@ -32,12 +32,6 @@ export function SendFormButton(props: ISendFormButtonProps) {
     );
 }
 
-export function Clearfix() {
-    return (
-        <div className="clearfix"></div>
-    );
-}
-
 export function CenterText(props: { children: React.ReactNode }) {
     return (
         <div className="col-lg-12 text-center">
