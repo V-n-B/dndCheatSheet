@@ -54,6 +54,7 @@
     "node-sass": "4.12.0",
     "tslint": "5.20.0",
     "tslint-microsoft-contrib": "6.2.0",
-    "typescript": "3.6.4"
+    "typescript": "3.6.4",
+    "utility-types": "3.10.0"
   }
 }

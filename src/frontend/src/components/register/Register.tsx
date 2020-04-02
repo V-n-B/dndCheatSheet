@@ -1,22 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, FormGroup, Input, Label } from 'reactstrap';
 import { fetchJson } from '../../utils/fetchJson';
 import { FormSpinner } from '../../utils/FormSpinner';
 import { FrontendErrorCodes } from '../../utils/FrontendErrorCode';
 import { frontendErrorText } from '../../utils/frontendErrorText';
-import { ReCaptchaV3Wrapper } from '../../utils/ReCaptchaV3Wrapper';
+import { ReCaptchaAction } from '../../utils/ReCaptchaAction';
+import { IInjectedCaptchaProps, withReCaptchaV3 } from '../../utils/withReCaptchaV3';
 import { CenterText, DangerAlert, SendFormButton, SuccessAlert } from '../elements/common';
 
-export function Register() {
+function InnerRegister(props: IInjectedCaptchaProps) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
     const [sentSuccess, setSentSuccess] = useState<boolean | null>(null);
-    const [captchaReady, setCaptchaReady] = useState(false);
-    const [formSubmitted, setFormSubmitted] = useState(false);
     const [feedbackText, setFeedbackText] = useState('');
 
+    useEffect(() => {
+        if (props.captchaToken) {
+            handleCaptchaToken();
+        }
+    }, [props.captchaToken]);
 
     if (sentSuccess) {
         return <SuccessAlert headerText="Thank you!">
@@ -30,22 +34,12 @@ export function Register() {
         return (
             <>
                 {renderFeedback()}
-                <ReCaptchaV3Wrapper action="register" onCaptchaReady={isReady => setCaptchaReady(isReady)} formSubmitted={formSubmitted} onCaptchaToken={handleCaptchaToken}>
-                    {renderRegisterForm()}
-                </ReCaptchaV3Wrapper>
-            </>
-        );
-    }
-
-    function renderRegisterForm() {
-        return (
-            <>
                 <h1>Register</h1>
                 <Form
                     id="contactForm"
-                    onSubmit={e => {
+                    onSubmit={async e => {
                         e.preventDefault();
-                        handleSubmit();
+                        await handleSubmit();
                     }}
                     autoComplete="off">
                     <FormGroup>
@@ -57,8 +51,8 @@ export function Register() {
                             id="email"
                             placeholder="Enter your email"
                             value={email}
-                            onChange={async event => {
-                                setEmail(event.currentTarget.value);
+                            onChange={e => {
+                                setEmail(e.currentTarget.value);
                             }}
                         />
                     </FormGroup>
@@ -71,8 +65,8 @@ export function Register() {
                             id="password"
                             placeholder="Enter your password"
                             value={password}
-                            onChange={async event => {
-                                setPassword(event.currentTarget.value);
+                            onChange={e => {
+                                setPassword(e.currentTarget.value);
                             }}
                         />
                     </FormGroup>
@@ -85,13 +79,13 @@ export function Register() {
                             id="username"
                             placeholder="Enter your username"
                             value={username}
-                            onChange={async event => {
-                                setUsername(event.currentTarget.value);
+                            onChange={e => {
+                                setUsername(e.currentTarget.value);
                             }}
                         />
                     </FormGroup>
                     <CenterText>
-                        <SendFormButton isProcessing={isProcessing} captchaReady={captchaReady} color="primary">
+                        <SendFormButton isProcessing={isProcessing} captchaReady={props.captchaIsReady} color="primary">
                             Send message
                         </SendFormButton>
                     </CenterText>
@@ -100,14 +94,14 @@ export function Register() {
         );
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
         // TODO: validation call goes here
         setIsProcessing(true);
-        setFormSubmitted(true);
+        await props.handleFormSubmit();
     }
 
-    async function handleCaptchaToken(captchaToken: string) {
-        const result = await fetchJson('api/register', 'POST', { email, password, username, captchaToken }, [FrontendErrorCodes.CAPTCHA_FAILED]);
+    async function handleCaptchaToken() {
+        const result = await fetchJson('api/register', 'POST', { email, password, username, captchaToken: props.captchaToken }, [FrontendErrorCodes.CAPTCHA_FAILED]);
 
         setIsProcessing(false);
 
@@ -115,7 +109,6 @@ export function Register() {
             handleRegisterSuccess();
         } else {
             setSentSuccess(false);
-            setFormSubmitted(false);
             if (result.status === 200 && result.json && result.json.code) {
                 setFeedbackText(result.json.code);
             } else if (result.errorCode) {
@@ -158,3 +151,5 @@ export function Register() {
         }
     }
 }
+
+export const Register = withReCaptchaV3(InnerRegister, ReCaptchaAction.register);
