@@ -4,9 +4,12 @@
   "description": "This is a cheat sheet for DnD",
   "main": "server.js",
   "scripts": {
-    "start": "npm run dev:backend:watch",
+    "start": "npm run dev:watch",
+    "dev:watch": "npm run clean && mkdirp build/backend && parallel build-ts-backend:watch serve:backend:watch frontend:dev:watch",
+    "backend:dev:watch-no-frontend": "npm run clean && mkdirp build/backend && parallel build-ts-backend:watch serve:backend:watch",
+    "frontend:dev:watch": "cd src/frontend && npm start",
     "clean": "rimraf build dist",
-    "dev:backend:watch": "npm run clean && mkdirp build/backend && mkdirp build/frontend && npm run build-frontend && parallel build-ts-backend:watch serve:backend:watch",
+    "dev:backend:watch-build-frontend": "npm run clean && mkdirp build/backend && mkdirp build/frontend && npm run build-frontend && parallel build-ts-backend:watch serve:backend:watch",
     "build-frontend": "cd src/frontend && npm install && wait-on node_modules/ && npm run build && wait-on build/ && cp -R build/ ../../build/frontend",
     "build-ts-backend:watch": "npm run build-ts-backend -- -w --preserveWatchOutput",
     "build-ts-backend": "tsc -incremental -p tsconfig.backend.json",
@@ -17,14 +20,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/voinik/dndCheatSheet.git"
+    "url": "git+https://github.com/V-n-B/dndCheatSheet.git"
   },
   "author": "Victor Panteleev & Ben Linnenbank",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/voinik/dndCheatSheet/issues"
+    "url": "https://github.com/V-n-B/dndCheatSheet/issues"
   },
-  "homepage": "https://github.com/voinik/dndCheatSheet#readme",
+  "homepage": "https://github.com/V-n-B/dndCheatSheet#readme",
   "dependencies": {
     "@wwwouter/typed-knex": "2.4.1",
     "aws-sdk": "2.555.0",
@@ -32,8 +35,10 @@
     "express": "4.17.1",
     "git-branch": "2.0.1",
     "helmet": "3.21.2",
+    "jquery": "3.4.1",
     "knex": "0.20.2",
     "lodash": "4.17.15",
+    "node-fetch": "2.6.0",
     "pg": "7.12.1"
   },
   "devDependencies": {
@@ -42,6 +47,7 @@
     "@types/git-branch": "2.0.1",
     "@types/helmet": "0.0.44",
     "@types/lodash": "4.14.149",
+    "@types/node-fetch": "2.5.5",
     "@types/pg": "7.11.2",
     "@wwwouter/tslint-contrib": "1.0.0",
     "dotenv": "8.2.0",

@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.send-button-disabled {
+  background-color: transparent !important;
+  border-color: white !important;
+}
+
+.send-button-disabled:hover {
+  background-color: transparent !important;
+  border-color: white !important;
+}
