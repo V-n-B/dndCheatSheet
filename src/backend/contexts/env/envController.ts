@@ -6,7 +6,6 @@ export async function getEnv(req: express.Request, res: express.Response) {
         captchaSiteKey: process.env.CAPTCHA_SITE_KEY,
     };
 
-    console.log('About to send back env settings');
     res.type('.js');
     res.send('window.dndAppSettings = ' + JSON.stringify(settings));
 }
