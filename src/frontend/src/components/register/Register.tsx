@@ -20,6 +20,7 @@ function InnerRegister(props: IInjectedCaptchaProps) {
         if (props.captchaToken) {
             handleCaptchaToken();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.captchaToken]);
 
     if (sentSuccess) {
