@@ -102,7 +102,7 @@ function InnerRegister(props: IInjectedCaptchaProps) {
     }
 
     async function handleCaptchaToken() {
-        const result = await fetchJson('api/register', 'POST', { email, password, username, captchaToken: props.captchaToken }, [FrontendErrorCodes.CAPTCHA_FAILED]);
+        const result = await fetchJson('api/register', 'POST', { email, password, username, captchaToken: props.captchaToken }, [FrontendErrorCodes.CAPTCHA_FAILED, FrontendErrorCodes.EMAIL_ALREADY_EXISTS]);
 
         setIsProcessing(false);
 
