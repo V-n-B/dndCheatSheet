@@ -25,7 +25,10 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
-        "strictPropertyInitialization": false
+        "strictPropertyInitialization": false,
+        "types": [
+            "reflect-metadata"
+        ],
     },
     "include": [
         "src/backend/**/*"
