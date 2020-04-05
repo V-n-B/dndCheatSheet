@@ -56,7 +56,7 @@ jobs:
             - src/frontend/build/**
             - src/frontend/node_modules/**
 
-  linter:
+  linter-and-tests:
     executor: docker-image
     steps:
       - checkout
@@ -64,6 +64,7 @@ jobs:
           at: ./
       - run: npm run tslint
       - run: cd src/frontend && npm run tslint
+      - run: npm run test
 
 workflows:
   version: 2
@@ -71,7 +72,7 @@ workflows:
     jobs:
       - build-backend
       - build-frontend
-      - linter:
+      - linter-and-tests:
           requires:
             - build-backend
             - build-frontend

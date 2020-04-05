@@ -1,6 +1,9 @@
 import express from 'express';
+import { v4 as uuidv4 } from 'uuid';
 import { BackendErrorCodes } from '../../utils/BackendErrorCodes';
 import { getCaptchaVerificationResponse } from '../../utils/getCaptchaVerificationResponse';
+import { hashNewPassword } from '../../utils/hashing';
+import { UserRepository } from './UserRepository';
 
 const registerAction = 'register';
 const captchaScoreThreshold = 0.7;
@@ -27,12 +30,23 @@ export async function register(req: express.Request, res: express.Response) {
         return res.status(400).send({ code: BackendErrorCodes.CAPTCHA_FAILED });
     }
 
-    // TODO: Replace this for actual database calls
-    console.log(`Registering new account with email: ${email}, username: ${username} and password: ${password}`);
+    const repository = new UserRepository();
 
-    // TODO: Check if the username and email already exists. If they exist, send 200 with a message:
-    // res.statusMessage = BackendErrorCodes.EMAIL_ALREADY_EXISTS;
-    // return res.status(200).send({ code: BackendErrorCodes.EMAIL_ALREADY_EXISTS });
+    const userExists = await repository.findOneByEmail(email);
+    console.log('userExists: ', userExists);
+    if (userExists) {
+        return res.status(200).send({ code: BackendErrorCodes.EMAIL_ALREADY_EXISTS });
+    }
+
+    const id = uuidv4();
+    const hashedPassword = await hashNewPassword(password);
+    const newUser = {
+        id,
+        email_address: (email as string),
+        password: hashedPassword,
+        username: (username as string),
+    };
+    await repository.insertItem(newUser);
 
     res.status(201).send({});
 }

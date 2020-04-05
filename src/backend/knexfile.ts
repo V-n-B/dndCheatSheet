@@ -9,7 +9,7 @@ pg.types.setTypeParser(1082, 'text', String); // date
 let databaseName = 'dndcheatsheet';
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     let branchTag = gitBranch.sync().replace(/\W+/g, '_').toLowerCase();
-    branchTag = branchTag.substring(0, 7).replace(/_$/, '');
+    branchTag = branchTag.substring(0, 14).replace(/_$/, '');
     databaseName += '_' + branchTag;
 }
 

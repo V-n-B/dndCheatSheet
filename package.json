@@ -4,9 +4,12 @@
   "description": "This is a cheat sheet for DnD",
   "main": "server.js",
   "scripts": {
-    "start": "npm run dev:watch",
+    "start": "npm run dev:watch:low-memory",
+    "test": "npm run build-ts-backend && jest --bail",
     "dev:watch": "npm run clean && mkdirp build/backend && parallel build-ts-backend:watch serve:backend:watch frontend:dev:watch",
+    "dev:watch:low-memory": "npm run clean && mkdirp build/backend && parallel build-ts-backend:watch serve:backend:watch:low-memory frontend:dev:watch",
     "backend:dev:watch-no-frontend": "npm run clean && mkdirp build/backend && parallel build-ts-backend:watch serve:backend:watch",
+    "backend:dev:watch:low-memory-no-frontend": "npm run clean && mkdirp build/backend && parallel build-ts-backend:watch serve:backend:watch:low-memory",
     "frontend:dev:watch": "cd src/frontend && npm start",
     "clean": "rimraf build dist",
     "dev:backend:watch-build-frontend": "npm run clean && mkdirp build/backend && mkdirp build/frontend && npm run build-frontend && parallel build-ts-backend:watch serve:backend:watch",
@@ -14,9 +17,15 @@
     "build-ts-backend:watch": "npm run build-ts-backend -- -w --preserveWatchOutput",
     "build-ts-backend": "tsc -incremental -p tsconfig.backend.json",
     "serve:backend:watch": "nodemon -C -d 1 --ext js --watch build/backend --exec \"wait-on build/scripts/createDatabase.js && node build/scripts/createDatabase.js && node --inspect -r dotenv/config build/backend/server.js\"",
+    "serve:backend:watch:low-memory": "nodemon -C -d 1 --ext js --watch build/backend --exec \"wait-on build/scripts/createDatabase.js && node build/scripts/createDatabase.js && node --max-old-space-size=450 --inspect -r dotenv/config build/backend/server.js\"",
     "create-database": "npm run clean && npm run build-ts-backend && node -r dotenv/config build/scripts/createDatabase.js",
     "remove-databases": "ts-node --transpile-only src/scripts/removeDatabases.ts",
     "tslint": "tslint -t verbose --project tsconfig.backend.json"
+  },
+  "jest": {
+    "roots": [
+      "build/test"
+    ]
   },
   "repository": {
     "type": "git",
@@ -30,27 +39,37 @@
   "homepage": "https://github.com/V-n-B/dndCheatSheet#readme",
   "dependencies": {
     "@wwwouter/typed-knex": "2.4.1",
+    "argon2": "0.26.1",
     "aws-sdk": "2.555.0",
     "body-parser": "1.19.0",
     "express": "4.17.1",
     "git-branch": "2.0.1",
     "helmet": "3.21.2",
+    "inversify": "5.0.1",
     "jquery": "3.4.1",
     "knex": "0.20.2",
     "lodash": "4.17.15",
+    "moment": "2.24.0",
     "node-fetch": "2.6.0",
-    "pg": "7.12.1"
+    "pg": "7.12.1",
+    "reflect-metadata": "0.1.13",
+    "uuid": "7.0.3"
   },
   "devDependencies": {
     "@types/body-parser": "1.17.1",
     "@types/express": "4.17.1",
     "@types/git-branch": "2.0.1",
     "@types/helmet": "0.0.44",
+    "@types/inversify": "2.0.33",
+    "@types/jest": "25.2.1",
     "@types/lodash": "4.14.149",
+    "@types/moment": "2.13.0",
     "@types/node-fetch": "2.5.5",
     "@types/pg": "7.11.2",
+    "@types/uuid": "7.0.2",
     "@wwwouter/tslint-contrib": "1.0.0",
     "dotenv": "8.2.0",
+    "jest": "25.2.7",
     "mkdirp": "0.5.1",
     "nodemon": "1.19.4",
     "npm-parallel": "2.0.1",

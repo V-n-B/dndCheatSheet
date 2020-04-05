@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "lib": [
+      "ES6",
       "dom",
       "dom.iterable",
       "esnext"
@@ -24,7 +25,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "types": [
+      "reflect-metadata"
+    ],
   },
   "include": [
     "src"

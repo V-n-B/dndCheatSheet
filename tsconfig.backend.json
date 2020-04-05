@@ -7,6 +7,7 @@
     },
     "include": [
         "src/backend/**/*",
-        "src/scripts/**/*"
+        "src/scripts/**/*",
+        "src/test/**/*"
     ]
 }
