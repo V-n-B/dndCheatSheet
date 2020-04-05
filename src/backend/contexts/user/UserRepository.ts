@@ -8,7 +8,6 @@ export class UserRepository {
     protected typedKnex: TypedKnex;
 
     public async insertItem(user: User) {
-        console.log('user we got inside repository: ', JSON.stringify(user));
         const now = moment().toISOString();
         if (!user.created_at) {
             user.created_at = now;
