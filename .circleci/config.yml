@@ -42,7 +42,7 @@ jobs:
             - frontend-packages-v1-
 
       - run: cd src/frontend && npm install --prefer-offline --no-save
-      - run: cd src/frontend && npm run build
+      - run: cd src/frontend && SKIP_PREFLIGHT_CHECK=true npm run build
 
       - save_cache:
           name: Save frontend node_modules cache
