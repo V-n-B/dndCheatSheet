@@ -56,7 +56,7 @@ jobs:
             - src/frontend/build/**
             - src/frontend/node_modules/**
 
-  linter:
+  linter-and-tests:
     executor: docker-image
     steps:
       - checkout
@@ -72,7 +72,7 @@ workflows:
     jobs:
       - build-backend
       - build-frontend
-      - linter:
+      - linter-and-tests:
           requires:
             - build-backend
             - build-frontend
