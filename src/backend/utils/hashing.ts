@@ -19,7 +19,7 @@ const config = {
     digest: 'sha512',
 };
 
-export async function hashNewpassword(password: string): Promise<string> {
+export async function hashNewPassword(password: string): Promise<string> {
     if (!password) {
         throw new Error('Password is empty');
     }

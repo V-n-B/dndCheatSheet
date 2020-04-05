@@ -2,7 +2,7 @@ import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { BackendErrorCodes } from '../../utils/BackendErrorCodes';
 import { getCaptchaVerificationResponse } from '../../utils/getCaptchaVerificationResponse';
-import { hashNewpassword } from '../../utils/hashing';
+import { hashNewPassword } from '../../utils/hashing';
 import { UserRepository } from './UserRepository';
 
 const registerAction = 'register';
@@ -39,7 +39,7 @@ export async function register(req: express.Request, res: express.Response) {
     }
 
     const id = uuidv4();
-    const hashedPassword = await hashNewpassword(password);
+    const hashedPassword = await hashNewPassword(password);
     const newUser = {
         id,
         email_address: (email as string),
