@@ -20,7 +20,6 @@
     "serve:backend:watch:low-memory": "nodemon -C -d 1 --ext js --watch build/backend --exec \"wait-on build/scripts/createDatabase.js && node build/scripts/createDatabase.js && node --max-old-space-size=450 --inspect -r dotenv/config build/backend/server.js\"",
     "create-database": "npm run clean && npm run build-ts-backend && node -r dotenv/config build/scripts/createDatabase.js",
     "remove-databases": "ts-node --transpile-only src/scripts/removeDatabases.ts",
-    "validate-tables": "npm run clean && npm run build-ts-backend && node -r dotenv/config build/scripts/validateTables.js",
     "tslint": "tslint -t verbose --project tsconfig.backend.json"
   },
   "jest": {
