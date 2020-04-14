@@ -25,7 +25,7 @@ function InnerRegister(props: IInjectedCaptchaProps) {
 
     if (sentSuccess) {
         return <SuccessAlert headerText="Thank you!">
-            Message received! Thanks for reaching out to us, we'll be in touch!
+            Please verify your account through the email we've sent you and you're good to go!
         </SuccessAlert>;
     } else {
         return renderForm();
@@ -87,7 +87,7 @@ function InnerRegister(props: IInjectedCaptchaProps) {
                     </FormGroup>
                     <CenterText>
                         <SendFormButton isProcessing={isProcessing} captchaReady={props.captchaIsReady} color="primary">
-                            Send message
+                            Register
                         </SendFormButton>
                     </CenterText>
                 </Form>
@@ -102,7 +102,10 @@ function InnerRegister(props: IInjectedCaptchaProps) {
     }
 
     async function handleCaptchaToken() {
-        const result = await fetchJson('api/register', 'POST', { email, password, username, captchaToken: props.captchaToken }, [FrontendErrorCodes.CAPTCHA_FAILED, FrontendErrorCodes.EMAIL_ALREADY_EXISTS]);
+        const result = await fetchJson('/api/users/register', 'POST',
+            { email, password, username, captchaToken: props.captchaToken },
+            [FrontendErrorCodes.CAPTCHA_FAILED, FrontendErrorCodes.EMAIL_ALREADY_EXISTS, FrontendErrorCodes.USERNAME_ALREADY_EXISTS]
+        );
 
         setIsProcessing(false);
 
@@ -137,6 +140,11 @@ function InnerRegister(props: IInjectedCaptchaProps) {
                 case FrontendErrorCodes.EMAIL_ALREADY_EXISTS:
                     return <DangerAlert headerText="Whoops!">
                         {frontendErrorText[FrontendErrorCodes.EMAIL_ALREADY_EXISTS]}
+                    </DangerAlert>;
+
+                case FrontendErrorCodes.USERNAME_ALREADY_EXISTS:
+                    return <DangerAlert headerText="Whoops!">
+                        {frontendErrorText[FrontendErrorCodes.USERNAME_ALREADY_EXISTS]}
                     </DangerAlert>;
 
                 case FrontendErrorCodes.CAPTCHA_FAILED:

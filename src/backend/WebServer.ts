@@ -1,11 +1,15 @@
 import { validateEntities } from '@wwwouter/typed-knex';
+import AWS from 'aws-sdk';
 import bodyParser from 'body-parser';
+import connectSessionKnex from 'connect-session-knex';
 import express from 'express';
+import session from 'express-session';
 import helmet from 'helmet';
 import path from 'path';
 import { routes } from './routes';
 import { BindingScope, injectable } from './utils/dependencyInjection';
 import { KnexProvider } from './utils/KnexProvider';
+import { sessionDuration } from './utils/sessionDuration';
 
 @injectable(BindingScope.Singleton)
 export class WebServer {
@@ -21,11 +25,35 @@ export class WebServer {
         await this.migrate();
         await this.validateTypedKnexTables();
 
+        AWS.config.update({ region: process.env.AWS_SES_REGION });
+        AWS.config.accessKeyId = process.env.ACCESSKEYID;
+        AWS.config.secretAccessKey = process.env.SECRETACCESSKEY;
+
         app.use(express.static(path.join(__dirname, '..', 'frontend')));
         app.use(helmet());
         app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
         app.use(bodyParser.json({ limit: '10mb' }));
         app.use(express.json());
+
+        if (app.get('env') === 'production') {
+            app.set('trust proxy', 1); // trust first proxy
+        } else {
+            process.env.COOKIE_SECRET = 'jaVwjRutxr+9jKCU';
+        }
+
+        app.use(session({
+            cookie: {
+                sameSite: 'lax',
+                secure: !['development'].includes(process.env.NODE_ENV || ''),
+                maxAge: sessionDuration,
+            },
+            proxy: true,
+            resave: false,
+            saveUninitialized: true,
+            secret: process.env.COOKIE_SECRET || '',
+            store: new (connectSessionKnex(session))({ knex: this.knexProvider.knex }),
+            rolling: true,
+        }));
 
         routes(app._router);
 

@@ -7,11 +7,12 @@ interface IFetchResult {
 
 export async function fetchJson(
     url: string,
-    method: 'POST' | 'GET',
+    method: 'POST' | 'GET' | 'DELETE',
     body?: {},
     allowedErrorCodes?: string[],
     allowedHTTPErrorCodes?: number[]
 ): Promise<IFetchResult> {
+    const dndToken = sessionStorage.getItem('dnd-token');
     let bodyString = undefined;
     let status = 0;
     if (body) {
@@ -23,8 +24,10 @@ export async function fetchJson(
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'dnd-token': dndToken || '',
         },
         body: bodyString,
+        credentials: 'include',
     });
 
     const contentType = response.headers.get('content-type');
