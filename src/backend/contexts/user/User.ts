@@ -7,9 +7,15 @@ export class User {
     @Column()
     public username: string;
     @Column()
-    public email_address: string;
+    public email: string;
     @Column()
     public password: string;
+    @Column()
+    public is_active: boolean;
+    @Column()
+    public verification_token: string;
+    @Column()
+    public verification_token_generated_datetime: string;
     @Column()
     public last_login_on?: string;
     @Column()
