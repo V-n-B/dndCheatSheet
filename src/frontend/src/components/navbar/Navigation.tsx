@@ -18,7 +18,8 @@ export function Navigation() {
             <Nav className="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
                 <Container>
                     <NavItem>
-                        <Link to="/" className="navbar-brand" onClick={() => null}>DnD Cheatsheet</Link>
+                        <FontAwesomeIcon icon={['fab', 'd-and-d']} size="4x" />
+                        <Link to="/" className="navbar-brand">DnD Cheatsheet</Link>
                     </NavItem>
                     <NavbarToggler className="navbar-toggler navbar-toggler-right" onClick={toggleNavbar}>
                         <FontAwesomeIcon icon="bars" />

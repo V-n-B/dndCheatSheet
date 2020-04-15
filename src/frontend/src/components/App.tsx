@@ -1,4 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { faDAndD } from '@fortawesome/free-brands-svg-icons';
 import { faBars, faDiceD20 } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect } from 'react';
 import { Container } from 'reactstrap';
@@ -9,7 +10,7 @@ import { CatchingComponent } from './elements/CatchingComponent';
 import { ContentWrapper } from './elements/common';
 import { Navigation } from './navbar/Navigation';
 
-library.add(faBars, faDiceD20);
+library.add(faBars, faDiceD20, faDAndD);
 
 export function App() {
     const { authState, fetchAuth } = useAuth();
