@@ -1,14 +1,14 @@
 import { useContext } from 'react';
 import { fetchJson } from '../utils/fetchJson';
 import { FrontendErrorCodes } from '../utils/FrontendErrorCode';
-import { AuthContext, IActionType } from './auth';
+import { ActionType, AuthContext } from './auth';
 
 export function useAuth() {
     const { authState, authDispatch } = useContext(AuthContext);
 
     function dispatchLogin(json: any) {
         authDispatch({
-            type: IActionType.AUTH_LOGIN,
+            type: ActionType.AUTH_LOGIN,
             user: {
                 ...json,
                 loggedIn: true,
@@ -19,13 +19,13 @@ export function useAuth() {
     async function dispatchLogout() {
         await fetchJson('/api/users/logout', 'DELETE');
         authDispatch({
-            type: IActionType.AUTH_LOGOUT,
+            type: ActionType.AUTH_LOGOUT,
         });
     }
 
     function dispatchAuthFailed() {
         authDispatch({
-            type: IActionType.AUTH_FAILED,
+            type: ActionType.AUTH_FAILED,
         });
     }
 

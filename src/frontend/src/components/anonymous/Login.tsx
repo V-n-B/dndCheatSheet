@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Form, FormGroup, Input, Label } from 'reactstrap';
+import { Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap';
 import { useAuth } from '../../auth/useAuth';
 import { fetchJson } from '../../utils/fetchJson';
 import { FormSpinner } from '../../utils/FormSpinner';
 import { FrontendErrorCodes } from '../../utils/FrontendErrorCode';
 import { frontendErrorText } from '../../utils/frontendErrorText';
+import { getErrorText } from '../../utils/getErrorText';
 import { ReCaptchaAction } from '../../utils/ReCaptchaAction';
+import { useFormField } from '../../utils/useFormField';
+import { emptyValidationErrors, validate, ValidationErrors } from '../../utils/validation';
 import { IInjectedCaptchaProps, withReCaptchaV3 } from '../../utils/withReCaptchaV3';
+import { loginSchema } from '../../validation/user';
 import { CenterText, DangerAlert, SendFormButton } from '../elements/common';
 
 function InnerLogin(props: IInjectedCaptchaProps) {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [useOnChangeValidation, setUseOnChangeValidation] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
     const [loginFailed, setLoginFailed] = useState(false);
     const [feedbackText, setFeedbackText] = useState('');
+    const [formErrors, setFormErrors] = useState<ValidationErrors>(emptyValidationErrors);
+    const [username, setUsername] = useFormField('username', '', loginSchema, useOnChangeValidation, formErrors, setFormErrors);
+    const [password, setPassword] = useFormField('password', '', loginSchema, useOnChangeValidation, formErrors, setFormErrors);
     const { dispatchLogin } = useAuth();
 
     useEffect(() => {
@@ -47,7 +53,9 @@ function InnerLogin(props: IInjectedCaptchaProps) {
                         onChange={e => {
                             setUsername(e.currentTarget.value);
                         }}
+                        invalid={!!formErrors.get('username')}
                     />
+                    <FormFeedback>{getFeedbackText(formErrors.get('username'))}</FormFeedback>
                 </FormGroup>
                 <FormGroup>
                     <Label for="password">Password</Label>
@@ -61,19 +69,27 @@ function InnerLogin(props: IInjectedCaptchaProps) {
                         onChange={e => {
                             setPassword(e.currentTarget.value);
                         }}
+                        invalid={!!formErrors.get('password')}
                     />
+                    <FormFeedback>{getFeedbackText(formErrors.get('password'))}</FormFeedback>
                 </FormGroup>
                 <CenterText>
                     <SendFormButton isProcessing={isProcessing} captchaReady={props.captchaIsReady} color="primary">
                         Login
-                        </SendFormButton>
+                    </SendFormButton>
                 </CenterText>
             </Form>
         </>
     );
 
     async function handleSubmit() {
-        // TODO: validation call goes here
+        const { hasErrors, errors } = validateForm();
+        if (hasErrors) {
+            setFormErrors(errors);
+            setUseOnChangeValidation(true);
+            return;
+        }
+
         setIsProcessing(true);
         await props.handleFormSubmit();
     }
@@ -122,10 +138,19 @@ function InnerLogin(props: IInjectedCaptchaProps) {
 
                 default:
                     return <DangerAlert headerText="Whoopsy!">
-                        Something went wrong! Please try again.
+                        {frontendErrorText[FrontendErrorCodes.GENERAL]}
                     </DangerAlert>;
             }
         }
+    }
+
+    function getFeedbackText(errorMessage?: string) {
+        return errorMessage ? getErrorText(errorMessage) : '';
+    }
+
+    function validateForm() {
+        const loginForm = { username, password };
+        return validate(loginSchema, loginForm);
     }
 }
 

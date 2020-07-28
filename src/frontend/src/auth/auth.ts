@@ -30,7 +30,7 @@ export const initialAuth: IAuthenticationState = {
     token: undefined,
 };
 
-export enum IActionType {
+export enum ActionType {
     AUTH_LOGIN = 'AUTH_LOGIN',
     AUTH_LOGOUT = 'AUTH_LOGOUT',
     AUTH_FAILED = 'AUTH_FAILED',
@@ -38,23 +38,23 @@ export enum IActionType {
 
 
 interface ILoginAction {
-    type: IActionType.AUTH_LOGIN;
+    type: ActionType.AUTH_LOGIN;
     user: ISessionuser;
 }
 
 interface ILogoutAction {
-    type: IActionType.AUTH_LOGOUT;
+    type: ActionType.AUTH_LOGOUT;
 }
 
 interface IAuthFailedAction {
-    type: IActionType.AUTH_FAILED;
+    type: ActionType.AUTH_FAILED;
 }
 
 type ActionTypes = ILoginAction | ILogoutAction | IAuthFailedAction;
 
 export function authReducer(state: IAuthenticationState, action: ActionTypes): IAuthenticationState {
     switch (action.type) {
-        case IActionType.AUTH_LOGIN:
+        case ActionType.AUTH_LOGIN:
             if (action.user.token) {
                 sessionStorage.setItem('dnd-token', action.user.token);
             }
@@ -67,7 +67,7 @@ export function authReducer(state: IAuthenticationState, action: ActionTypes): I
                 token: action.user.token,
             };
 
-        case IActionType.AUTH_LOGOUT:
+        case ActionType.AUTH_LOGOUT:
             if (sessionStorage.getItem('dnd-token')) {
                 sessionStorage.removeItem('dnd-token');
             }
@@ -76,7 +76,7 @@ export function authReducer(state: IAuthenticationState, action: ActionTypes): I
                 checking: false,
             };
 
-        case IActionType.AUTH_FAILED:
+        case ActionType.AUTH_FAILED:
             if (sessionStorage.getItem('dnd-token')) {
                 sessionStorage.removeItem('dnd-token');
             }
