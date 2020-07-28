@@ -7,6 +7,8 @@ import { login as loginUser } from '../../utils/loginUser';
 import { ensureProperCaptchaScore } from '../../utils/reCaptcha/ensureProperCaptchaScore';
 import { ReCaptchaAction } from '../../utils/reCaptcha/ReCaptchaAction';
 import { setUserInSession } from '../../utils/setUserInSession';
+import { xssFiltering } from '../../utils/xssFiltering';
+import { loginSchema, registerSchema, verifyAccountSchema } from '../../validation/user';
 import { sendRegistrationMail } from './sendRegistrationMail';
 import { sendWelcomeEmail } from './sendWelcomeEmail';
 import { User } from './User';
@@ -15,13 +17,15 @@ import { UserRepository } from './UserRepository';
 const REGISTRATION_TOKEN_EXPIRATION_MINUTES = 2 * 60;
 
 export async function register(req: express.Request, res: express.Response) {
-    const { email, password, username, captchaToken } = req.body;
-    // TODO: Validate that shiiiiit
-
-
-    const { errorCode } = await ensureProperCaptchaScore(captchaToken, ReCaptchaAction.register);
+    const { errorCode } = await ensureProperCaptchaScore(req.body.captchaToken, ReCaptchaAction.register);
     if (errorCode) {
         return res.status(400).send({ code: errorCode });
+    }
+
+    const [email, password, username] = xssFiltering([req.body.email, req.body.password, req.body.username]);
+    const validationResult = registerSchema.validate({ email, password, username });
+    if (validationResult.error) {
+        return res.status(400).send({ code: validationResult.error });
     }
 
     const repository = new UserRepository();
@@ -59,11 +63,14 @@ export async function verifyAccount(req: express.Request, res: express.Response)
         throw new Error('No session');
     }
 
-    // TODO: Validate the shizz
+    const [verificationToken] = xssFiltering([req.body.verificationToken]);
+    const validationResult = verifyAccountSchema.validate({ verificationToken });
+    if (validationResult.error) {
+        return res.status(400).send({ code: validationResult.error });
+    }
 
-    const token = req.body.verificationToken;
     const repository = new UserRepository();
-    const user = await repository.findOneByVerificationToken(token);
+    const user = await repository.findOneByVerificationToken(verificationToken);
 
     if (!user) {
         return res.status(400).send({ code: BackendErrorCodes.VERIFICATION_TOKEN_DOES_NOT_EXIST });
@@ -98,12 +105,15 @@ export async function login(req: express.Request, res: express.Response) {
         throw new Error('No session');
     }
 
-    // TODO: Validate username password captchaToken
-    const { username, password, captchaToken } = req.body;
-
-    const { errorCode } = await ensureProperCaptchaScore(captchaToken, ReCaptchaAction.login);
+    const { errorCode } = await ensureProperCaptchaScore(req.body.captchaToken, ReCaptchaAction.login);
     if (errorCode) {
         return res.status(400).send({ code: errorCode });
+    }
+
+    const [username, password] = xssFiltering([req.body.username, req.body.password]);
+    const validationResult = loginSchema.validate({ username, password });
+    if (validationResult.error) {
+        return res.status(400).send({ code: validationResult.error });
     }
 
     const repository = new UserRepository();
@@ -128,7 +138,7 @@ export async function login(req: express.Request, res: express.Response) {
 }
 
 export async function getCurrentSession(req: express.Request, res: express.Response) {
-    if (!!req.session && !!req.session.user) {
+    if (req.session && req.session.user) {
         return res.status(200).send(req.session.user);
     }
 

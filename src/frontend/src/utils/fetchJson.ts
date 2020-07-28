@@ -49,10 +49,12 @@ export async function fetchJson(
     if (status < 400) {
         return { status: status, json: json };
     }
+
     let code = 'DEFAULT';
     if (json && json.code) {
         code = json.code;
     }
+
     let message;
     if (json && json.message) {
         message = json.message;

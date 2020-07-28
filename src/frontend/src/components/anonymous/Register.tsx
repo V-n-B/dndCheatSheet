@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Form, FormGroup, Input, Label } from 'reactstrap';
+import { Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap';
 import { fetchJson } from '../../utils/fetchJson';
 import { FormSpinner } from '../../utils/FormSpinner';
 import { FrontendErrorCodes } from '../../utils/FrontendErrorCode';
 import { frontendErrorText } from '../../utils/frontendErrorText';
+import { getErrorText } from '../../utils/getErrorText';
 import { ReCaptchaAction } from '../../utils/ReCaptchaAction';
+import { useFormField } from '../../utils/useFormField';
+import { emptyValidationErrors, validate } from '../../utils/validation';
 import { IInjectedCaptchaProps, withReCaptchaV3 } from '../../utils/withReCaptchaV3';
+import { registerSchema } from '../../validation/user';
 import { CenterText, DangerAlert, SendFormButton, SuccessAlert } from '../elements/common';
 
 function InnerRegister(props: IInjectedCaptchaProps) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [username, setUsername] = useState('');
+    const [useOnChangeValidation, setUseOnChangeValidation] = useState(false);
+    const [formErrors, setFormErrors] = useState(emptyValidationErrors);
+    const [email, setEmail] = useFormField('email', '', registerSchema, useOnChangeValidation, formErrors, setFormErrors);
+    const [username, setUsername] = useFormField('username', '', registerSchema, useOnChangeValidation, formErrors, setFormErrors);
+    const [password, setPassword] = useFormField('password', '', registerSchema, useOnChangeValidation, formErrors, setFormErrors);
     const [isProcessing, setIsProcessing] = useState(false);
     const [sentSuccess, setSentSuccess] = useState<boolean | null>(null);
     const [feedbackText, setFeedbackText] = useState('');
@@ -55,7 +61,9 @@ function InnerRegister(props: IInjectedCaptchaProps) {
                             onChange={e => {
                                 setEmail(e.currentTarget.value);
                             }}
+                            invalid={!!formErrors.get('email')}
                         />
+                        <FormFeedback>{getFeedbackText(formErrors.get('email'))}</FormFeedback>
                     </FormGroup>
                     <FormGroup>
                         <Label for="password">Password</Label>
@@ -69,7 +77,9 @@ function InnerRegister(props: IInjectedCaptchaProps) {
                             onChange={e => {
                                 setPassword(e.currentTarget.value);
                             }}
+                            invalid={!!formErrors.get('password')}
                         />
+                        <FormFeedback>{getFeedbackText(formErrors.get('password'))}</FormFeedback>
                     </FormGroup>
                     <FormGroup>
                         <Label for="username">Username</Label>
@@ -83,7 +93,9 @@ function InnerRegister(props: IInjectedCaptchaProps) {
                             onChange={e => {
                                 setUsername(e.currentTarget.value);
                             }}
+                            invalid={!!formErrors.get('username')}
                         />
+                        <FormFeedback>{getFeedbackText(formErrors.get('username'))}</FormFeedback>
                     </FormGroup>
                     <CenterText>
                         <SendFormButton isProcessing={isProcessing} captchaReady={props.captchaIsReady} color="primary">
@@ -96,7 +108,13 @@ function InnerRegister(props: IInjectedCaptchaProps) {
     }
 
     async function handleSubmit() {
-        // TODO: validation call goes here
+        const { hasErrors, errors } = validateForm();
+        if (hasErrors) {
+            setFormErrors(errors);
+            setUseOnChangeValidation(true);
+            return;
+        }
+
         setIsProcessing(true);
         await props.handleFormSubmit();
     }
@@ -158,6 +176,15 @@ function InnerRegister(props: IInjectedCaptchaProps) {
                     </DangerAlert>;
             }
         }
+    }
+
+    function getFeedbackText(errorMessage?: string) {
+        return errorMessage ? getErrorText(errorMessage) : '';
+    }
+
+    function validateForm() {
+        const registerForm = { username, password, email };
+        return validate(registerSchema, registerForm);
     }
 }
 
