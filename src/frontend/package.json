@@ -14,6 +14,7 @@
     "es6-promise": "4.2.8",
     "font-awesome": "4.7.0",
     "history": "4.10.1",
+    "immutable": "4.0.0-rc.12",
     "jquery": "3.4.1",
     "react": "16.10.2",
     "react-dom": "16.10.2",
@@ -47,6 +48,7 @@
   "devDependencies": {
     "@types/classnames": "2.2.10",
     "@types/history": "4.7.5",
+    "@types/immutable": "3.8.7",
     "@types/react": "16.9.9",
     "@types/react-dom": "16.9.2",
     "@types/react-router-dom": "5.1.3",
