@@ -22,8 +22,6 @@ export function useFormField<T>(
     return [formField, setFormField] as const;
 
     function handleValidation() {
-        const errors2 = updateValidationErrorsForOne(schema, name, formField, errors);
-        console.log('errors: ', errors2);
         setErrors(updateValidationErrorsForOne(schema, name, formField, errors));
     }
 }

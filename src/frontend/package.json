@@ -9,6 +9,7 @@
     "@fortawesome/free-regular-svg-icons": "5.9.0",
     "@fortawesome/free-solid-svg-icons": "5.9.0",
     "@fortawesome/react-fontawesome": "0.1.4",
+    "@hapi/joi": "17.1.1",
     "@v-n-b/voi": "1.0.1",
     "bootstrap": "4.3.1",
     "classnames": "2.2.6",
@@ -48,6 +49,7 @@
   },
   "devDependencies": {
     "@types/classnames": "2.2.10",
+    "@types/hapi__joi": "17.1.4",
     "@types/history": "4.7.5",
     "@types/immutable": "3.8.7",
     "@types/react": "16.9.9",

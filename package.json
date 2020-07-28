@@ -39,7 +39,6 @@
   },
   "homepage": "https://github.com/V-n-B/dndCheatSheet#readme",
   "dependencies": {
-    "@hapi/joi": "17.1.1",
     "@v-n-b/voi": "^1.0.1",
     "@wwwouter/typed-knex": "2.4.1",
     "argon2": "0.26.1",
@@ -66,7 +65,6 @@
     "@types/express": "4.17.1",
     "@types/express-session": "1.17.0",
     "@types/git-branch": "2.0.1",
-    "@types/hapi__joi": "17.1.4",
     "@types/helmet": "0.0.44",
     "@types/inversify": "2.0.33",
     "@types/jest": "25.2.1",
