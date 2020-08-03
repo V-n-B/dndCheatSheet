@@ -43,7 +43,7 @@ function InnerRegister(props: IInjectedCaptchaProps) {
                 {renderFeedback()}
                 <h1>Register</h1>
                 <Form
-                    id="contactForm"
+                    id="registerForm"
                     onSubmit={async e => {
                         e.preventDefault();
                         await handleSubmit();
