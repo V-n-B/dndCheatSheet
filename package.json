@@ -51,7 +51,7 @@
     "git-branch": "2.0.1",
     "helmet": "3.21.2",
     "inversify": "5.0.1",
-    "jquery": "3.4.1",
+    "jquery": "3.5.0",
     "knex": "0.20.2",
     "lodash": "4.17.15",
     "moment": "2.24.0",
