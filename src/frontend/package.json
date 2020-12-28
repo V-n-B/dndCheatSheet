@@ -58,7 +58,7 @@
     "@types/reactstrap": "8.0.6",
     "@wwwouter/tslint-contrib": "1.0.0",
     "cross-env": "7.0.3",
-    "node-sass": "4.12.0",
+    "node-sass": "4.13.1",
     "tslint": "5.20.0",
     "tslint-microsoft-contrib": "6.2.0",
     "typescript": "3.6.4",
