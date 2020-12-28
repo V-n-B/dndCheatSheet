@@ -12,7 +12,7 @@ function getMailParams(customerEmail: string, verificationToken: string) {
         Destination: {
             ToAddresses: [
                 'victor_panteleev@hotmail.com',
-                // customerEmail,
+                customerEmail,
             ],
         },
         Message: {
