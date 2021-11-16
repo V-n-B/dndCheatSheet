@@ -43,7 +43,7 @@
     "@v-n-b/voi": "1.0.1",
     "@wwwouter/typed-knex": "2.4.1",
     "argon2": "0.26.1",
-    "aws-sdk": "2.555.0",
+    "aws-sdk": "2.814.0",
     "body-parser": "1.19.0",
     "connect-session-knex": "1.6.0",
     "express": "4.17.1",
