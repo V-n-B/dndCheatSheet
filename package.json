@@ -54,7 +54,7 @@
     "jquery": "3.4.1",
     "knex": "0.20.2",
     "lodash": "4.17.15",
-    "moment": "2.24.0",
+    "moment": "2.29.2",
     "node-fetch": "2.6.0",
     "pg": "7.12.1",
     "reflect-metadata": "0.1.13",
