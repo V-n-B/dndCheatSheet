@@ -52,7 +52,7 @@
     "helmet": "3.21.2",
     "inversify": "5.0.1",
     "jquery": "3.4.1",
-    "knex": "0.20.2",
+    "knex": "2.4.0",
     "lodash": "4.17.15",
     "moment": "2.24.0",
     "node-fetch": "2.6.0",
